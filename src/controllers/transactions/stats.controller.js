@@ -1,24 +1,47 @@
 const Transactions = require('./../../models/Transaction');
-
 exports.MonthlyStats = async (req, res) => {
   try {
-    const month = parseInt(req.query.month);
-    const year = parseInt(req.query.year);
-
-    const startDate = new Date(year, month - 1, 1)
-    const endDate = new Date(year, month, 1)
-
-    const transactions = await Transactions.find({
-      date: {
-        $gte: startDate,
-        $lt: endDate
+    const { month, year } = req.query;
+    const start = new Date(year, month - 1, 1);
+    const end = new Date(year, month, 0, 23, 59, 59);
+    const stats = await Transactions.aggregate([
+      {
+        $match: { date: { $gte: start, $lte: end } }
+      },
+      {
+        $group: {
+          _id: { type: "$type", category: "$category" },
+          total: { $sum: "$amount" }
+        }
       }
-    });
-
-    let totalIncome = 0;
-    let totalExpenses = 0;
-    let categoryTotals = {};
-
+    ])
+    let income = 0;
+    let expense = 0;
+    let categories = [];
+    stats.forEach((item) => {
+      if (item._id.type === "income") income += item.total;
+      if (item._id.type === "expense") {
+        expense += item.total;
+        categories.push({
+          category: item._id.type,
+          total: item.total
+        })
+      };
+    })
+    const categoryStats = categories.map((item) => ({
+      category: item.category,
+      total: item.total,
+      percentage: Number(((item.total / expense) * 100).toFixed(2))
+    }))
+    res.json({
+      status: 'success',
+      month: Number(month),
+      year: Number(year),
+      totalIncome: income,
+      totalExpense: expense,
+      balance: income - expense,
+      categories: categoryStats
+    })
   } catch (err) {
     console.log(err);
   }
