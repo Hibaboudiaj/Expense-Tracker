@@ -20,6 +20,9 @@ const deleteTransaction = async (id) => {
   return await Transaction.findByIdAndDelete(id);
 };
 
+
+
+//get balence
 const getBalance = async () => {
   const re = await Transaction.aggregate([
     {
