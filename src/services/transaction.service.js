@@ -8,18 +8,6 @@ const getTransactions = async () => {
   return await Transaction.find();
 };
 
-const getTransactionById = async (id) => {
-  return await Transaction.findById(id);
-};
-
-const updateTransaction = async (id, data) => {
-  return await Transaction.findByIdAndUpdate(id, data, { new: true });
-};
-
-const deleteTransaction = async (id) => {
-  return await Transaction.findByIdAndDelete(id);
-};
-
 
 
 //get balence
@@ -73,9 +61,6 @@ const listTransactionsService = async (query) => {
 module.exports = {
   createTransaction,
   getTransactions,
-  getTransactionById,
-  updateTransaction,
-  deleteTransaction,
   getBalance,
   listTransactionsService
 };
