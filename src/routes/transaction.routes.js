@@ -1,17 +1,17 @@
-import express from 'express';
-import { creatTransaction } from '../controllers/transactions/create.controller.js';
-import { listTransaction } from '../controllers/transactions/list.controller.js';
-
-
+const express = require("express");
 const router = express.Router();
 
+const controller = require("../controllers/transactions/create.controller");
 
-// create transaction
+router.post("/", controller.create);
 
-// GET Transactions
-router.get('/', listTransaction)
+router.get("/", controller.getAll);
 
-// GET transaction/stats
+router.get("/:id", controller.getOne);
 
+router.put("/:id", controller.update);
 
-export default router;
+router.delete("/:id", controller.remove);
+
+module.exports = router;
+

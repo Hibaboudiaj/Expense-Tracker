@@ -1,8 +1,26 @@
-import Transaction from "../models/Transaction.js";
+const Transaction = require("../models/Transaction");
 
+const createTransaction = async (data) => {
+  return await Transaction.create(data);
+};
 
+const getTransactions = async () => {
+  return await Transaction.find();
+};
 
-export const getBalance = async () => {
+const getTransactionById = async (id) => {
+  return await Transaction.findById(id);
+};
+
+const updateTransaction = async (id, data) => {
+  return await Transaction.findByIdAndUpdate(id, data, { new: true });
+};
+
+const deleteTransaction = async (id) => {
+  return await Transaction.findByIdAndDelete(id);
+};
+
+const getBalance = async () => {
   const re = await Transaction.aggregate([
     {
       $group: {
@@ -12,44 +30,49 @@ export const getBalance = async () => {
         }
       }
     }
-  ])
-
-
+  ]);
 
   let incom = 0;
   let expense = 0;
 
   re.forEach(el => {
-    el._id === "incom" ? incom = el.totale : 0;
-    el._id === "expense" ? expense = el.totale : 0;
-  })
+    if (el._id === "incom") incom = el.totale;
+    if (el._id === "expense") expense = el.totale;
+  });
 
-  return incom - expense
+  return incom - expense;
+};
 
-}
-
-export const listTransactionsService = async (query) => {
-
+const listTransactionsService = async (query) => {
   //filter
   let filter = {};
-  if(query.type) {
-    filter.type = query.type;
-  }
 
-  if(query.category) filter.category = query.category;
-
-  // pagination
-  const page = query.page;
-  const limit = query.limit;
+  if (query.type) filter.type = query.type;
+  if (query.category) filter.category = query.category;
+  //pagination
+  const page = query.page || 1;
+  const limit = query.limit || 10;
   const skip = (page - 1) * limit;
 
-  const totale = await Transaction.countDocuments(filter)
-  const transaction = await Transaction.find(filter).sort({createdAt: -1}).limit(limit).skip(skip)
-  
+  const totale = await Transaction.countDocuments(filter);
+
+  const transaction = await Transaction.find(filter)
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(skip);
 
   return {
-    meta: {totale, page, limit},
+    meta: { totale, page, limit },
     data: transaction
-  }
+  };
+};
 
-}
+module.exports = {
+  createTransaction,
+  getTransactions,
+  getTransactionById,
+  updateTransaction,
+  deleteTransaction,
+  getBalance,
+  listTransactionsService
+};
