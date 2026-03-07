@@ -9,7 +9,7 @@ const create = async (req, res,next) => {
     }
 };
 
-const getAll = async (req, res) => {
+const getAll = async (req, res,next) => {
     try{
         const transactions = await service.getTransactions(req.body);
         res.json(transactions);
