@@ -4,7 +4,6 @@ const router = express.Router();
 const controller = require("../controllers/transactions/create.controller");
 
 router.post("/", controller.create);
-
 router.get("/", controller.getAll);
 
 module.exports = router;

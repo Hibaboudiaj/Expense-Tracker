@@ -1,6 +1,8 @@
 const Transaction = require("../models/Transaction");
 
 const createTransaction = async (data) => {
+  console.log(data);
+  
   return await Transaction.create(data);
 };
 
