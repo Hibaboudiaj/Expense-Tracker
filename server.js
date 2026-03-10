@@ -1,16 +1,20 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const app = require('./app')
+const express = require("express");
+const connectDB = require("./src/config/db");
 
-dotenv.config({ path: './config.env' });
+const transactionRoutes = require("./src/routes/transaction.routes");
 
-mongoose.connect(process.env.DB_CONNECT)
-  .then(() => {
-    console.log("DB connection successful");
-  });
+const notFound = require("./src/middlewares/notFound");
 
-const port = process.env.PORT || 3000;
+const app = express();
 
-app.listen(port, () => {
-  console.log(`the server running on the port ${port}`);
+app.use(express.json());
+
+connectDB();
+
+app.use("/transactions", transactionRoutes);
+
+app.use(notFound);
+
+app.listen(8000, () => {
+  console.log("Server running on http://localhost:8000 🚀");
 });

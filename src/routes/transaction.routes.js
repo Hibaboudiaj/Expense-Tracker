@@ -11,3 +11,14 @@ router
 router.route('/stats').get(statsController.MonthlyStats);
 
 module.exports = router;
+const express = require("express");
+const router = express.Router();
+
+const controller = require("../controllers/transactions/create.controller");
+
+router.post("/", controller.create);
+
+router.get("/", controller.getAll);
+
+module.exports = router;
+
