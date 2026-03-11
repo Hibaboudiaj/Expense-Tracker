@@ -1,35 +1,43 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: [true, 'Title is required'],
+    trim: true
   },
 
   amount: {
     type: Number,
-    required: true,
+    required: [true, 'Amount is required'],
+    min: [0.01, 'Amount must be greater than 0']
   },
 
   type: {
     type: String,
-    enum: ["income", "expense"],
-    required: true,
+    required: [true, 'Type is required'],
+    enum: ['income', 'expense']
   },
 
   category: {
     type: String,
+    required: function () {
+      return this.type === 'expense';
+    }
   },
 
   date: {
     type: Date,
-    required: true,
+    required: [true, 'Date is required']
   },
 
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
+
 });
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
+module.exports = Transaction;
