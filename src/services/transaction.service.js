@@ -1,9 +1,9 @@
-const Transaction = require("../models/Transaction");
+const Transaction = require("../models/Transaction.js");
 
 const createTransaction = async (data) => {
-  console.log(data);
-  
-  return await Transaction.create(data);
+  // return promise khasna nst3mlo await bash nstna l natija dyal create
+  let t =  await Transaction.create(data);
+  return t;
 };
 
 const getTransactions = async () => {

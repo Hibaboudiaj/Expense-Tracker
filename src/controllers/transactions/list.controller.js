@@ -1,9 +1,10 @@
-import { listTransactionsService } from "../../services/transaction.service.js";
+const { model } = require("mongoose");
+const listT = require("../../services/transaction.service.js");
 
 
-export const listTransaction = async (req, res) => {
+const listTransaction = async (req, res) => {
     try {
-        const {meta, data} = await listTransactionsService(req.query)
+        const {meta, data} = await listT.listTransactionsService(req.query)
 
         res.status(200).json({
             success: true,
@@ -15,3 +16,5 @@ export const listTransaction = async (req, res) => {
         res.status(500).json({ success: false, message: err.message })
     }
 }
+
+module.exports = { listTransaction }

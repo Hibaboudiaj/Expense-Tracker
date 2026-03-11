@@ -1,4 +1,4 @@
-const Transactions = require('./../../models/Transaction');
+const Transactions = require('./../../models/Transaction.js');
 exports.MonthlyStats = async (req, res) => {
   try {
     const { month, year } = req.query;

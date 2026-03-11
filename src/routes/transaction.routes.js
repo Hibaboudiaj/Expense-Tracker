@@ -1,30 +1,18 @@
-const express = require('express');
-const transactionController = require('./../controllers/transaction.controller');
-const statsController = require('../controllers/transactions/stats.controller');
-
-const router = express.Router();
-
-router
-  .route('/')
-  .post(transactionController.createTransaction)
-  .get(transactionController.getTransactions);
-router.route('/stats').get(statsController.MonthlyStats);
-
-module.exports = router;
 const express = require("express");
 const router = express.Router();
 
 const controller = require("../controllers/transactions/create.controller.js");
-const controllerSats = require("../controllers/transactions/stats.controller");
-// const { route } = require("../../app");
+const controllerSats = require("../controllers/transactions/stats.controller.js");
+const { listTransaction } = require("../controllers/transactions/list.controller.js");
 
 router
-.post("/", controller.create)
-.get("/", controller.getAll)
+  .post("/", controller.create)
+  .get("/", controller.getAll)
+  .get("/filter", listTransaction);
 
 router
-.route('/stats')
-.get(controllerSats.MonthlyStats);
+  .route('/stats')
+  .get(controllerSats.MonthlyStats);
 
 
 module.exports = router;

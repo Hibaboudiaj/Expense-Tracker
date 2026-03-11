@@ -1,17 +1,26 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const app = require('./app')
+const express = require("express");
+const connectDB = require("./src/config/db.js");
 
-dotenv.config({ path: './config.env' });
-console.log(dotenv);
+const transactionRoutes = require("./src/routes/transaction.routes.js");
 
-mongoose.connect(process.env.DB_CONNECT)
-  .then(() => {
-    console.log("DB connection successful");
+const notFound = require("./src/middlewares/notFound.js");
+
+const app = express();
+
+app.use(express.json());
+
+connectDB();
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "API is healthy",
   });
+});
 
-const port = process.env.PORT || 3000;
+app.use("/transactions", transactionRoutes);
 
-app.listen(port, () => {
-  console.log(`the server running on the port ${port}`);
+
+app.listen(3030, () => {
+  console.log("Server running on http://localhost:3030 🚀");
 });

@@ -1,0 +1,32 @@
+###
+GET http://localhost:3030/health
+
+### GET ALL transactions
+GET http://localhost:3030/transactions
+
+### Create transaction
+POST http://localhost:3030/transactions
+Content-Type: application/json
+
+{
+	"title": "vvvv Shopping",
+	"amount": 4000.5,
+	"type": "expense",
+	"category": "Food",
+	"date": "2026-03-03"
+}
+
+### filter by category
+GET http://localhost:3030/transactions/filter?type=expense&category=Food
+
+### filter by type
+GET http://localhost:3030/transactions/filter?type=expense&page=2&limit=1
+
+### listing
+GET http://localhost:3030/transactions/filter?page=2&limit=2
+
+### Exact date
+
+
+### State
+GET http://localhost:3030/transactions/stats?month=3&year=2026
