@@ -3,9 +3,10 @@ const service = require("../../services/transaction.service");
 const create = async (req, res,next) => {
     try{
         const transaction = await service.createTransaction(req.body);
-        res.json(transaction);
+        res.status(200).json(transaction);
     }catch(err){
-        next(err)
+        console.log(err);
+        
     }
 };
 
